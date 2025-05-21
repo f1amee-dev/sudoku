@@ -134,7 +134,7 @@ const SudokuBoard = ({ difficulty }: SudokuBoardProps) => {
 
   return (
     <div className="relative">
-      <div className="sudoku-grid w-full max-w-md mx-auto">
+      <div className="sudoku-grid w-full max-w-md mx-auto bg-white rounded-xl shadow-md border border-indigo-100">
         {grid.map((row, rowIndex) => 
           row.map((cell, colIndex) => (
             <SudokuCell
@@ -152,10 +152,10 @@ const SudokuBoard = ({ difficulty }: SudokuBoardProps) => {
       </div>
       
       {isComplete && (
-        <div className="absolute inset-0 flex items-center justify-center bg-background/80 rounded-lg">
-          <div className="bg-card p-6 rounded-lg shadow-lg text-center">
-            <h2 className="text-2xl font-bold text-primary mb-4">Congratulations!</h2>
-            <p className="mb-4">You've completed the puzzle!</p>
+        <div className="absolute inset-0 flex items-center justify-center bg-white/80 backdrop-blur-sm rounded-xl">
+          <div className="bg-white p-6 rounded-xl shadow-lg text-center border border-indigo-100">
+            <h2 className="text-2xl font-bold text-indigo-600 mb-4">Congratulations!</h2>
+            <p className="mb-4 text-indigo-500">You've completed the puzzle!</p>
             <button 
               onClick={() => {
                 const { puzzle, solution } = generateSudoku(difficulty);
@@ -176,7 +176,7 @@ const SudokuBoard = ({ difficulty }: SudokuBoardProps) => {
                 }
                 setReadOnlyCells(readOnly);
               }}
-              className="px-4 py-2 bg-primary text-primary-foreground rounded-md"
+              className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-medium transition-colors"
             >
               Play Again
             </button>

@@ -22,18 +22,18 @@ const NumberPad = () => {
   };
 
   return (
-    <div className="number-pad grid grid-cols-3 gap-2 w-full max-w-xs">
+    <div className="number-pad grid grid-cols-3 gap-2 w-full max-w-xs bg-white p-4 rounded-xl shadow-md border border-indigo-100">
       {numbers.map(number => (
         <button
           key={number}
-          className="p-3 bg-white hover:bg-gray-100 rounded-md text-lg font-medium transition-colors"
+          className="p-3 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 rounded-lg text-lg font-medium transition-colors"
           onClick={() => handleNumberClick(number)}
         >
           {number}
         </button>
       ))}
       <button
-        className="p-3 bg-red-50 hover:bg-red-100 text-red-800 rounded-md col-span-3 text-sm font-medium transition-colors"
+        className="p-3 bg-white border border-indigo-200 hover:bg-indigo-50 text-indigo-500 rounded-lg col-span-3 text-sm font-medium transition-colors"
         onClick={handleClearClick}
       >
         Clear
