@@ -14,6 +14,7 @@ const SudokuBoard = ({ difficulty }: SudokuBoardProps) => {
   const [readOnlyCells, setReadOnlyCells] = useState<Record<string, boolean>>({});
   const [errorCells, setErrorCells] = useState<Record<string, boolean>>({});
   const [isComplete, setIsComplete] = useState(false);
+  const [confetti, setConfetti] = useState(false);
 
   // generate a new puzzle when difficulty changes
   useEffect(() => {
@@ -53,6 +54,13 @@ const SudokuBoard = ({ difficulty }: SudokuBoardProps) => {
     
     if (complete) {
       setIsComplete(true);
+      // trigger confetti effect
+      setConfetti(true);
+      
+      // reset confetti after 2 seconds
+      setTimeout(() => {
+        setConfetti(false);
+      }, 2000);
     }
   }, [grid, errorCells]);
 
@@ -104,7 +112,7 @@ const SudokuBoard = ({ difficulty }: SudokuBoardProps) => {
     setErrorCells(newErrors);
   };
 
-  // keyboard event handling for cell navigation and input
+  // pass number input and clear cell functions to parent
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (!selectedCell) return;
@@ -130,16 +138,14 @@ const SudokuBoard = ({ difficulty }: SudokuBoardProps) => {
     };
   }, [selectedCell, readOnlyCells, isComplete]);
 
-  if (grid.length === 0) {
-    return (
-      <div className="flex items-center justify-center p-8 h-96 w-full">
-        <div className="flex flex-col items-center">
-          <div className="w-10 h-10 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin mb-4"></div>
-          <div className="text-indigo-600">loading puzzle...</div>
-        </div>
+  if (grid.length === 0) return (
+    <div className="flex items-center justify-center p-12">
+      <div className="animate-pulse flex flex-col items-center">
+        <div className="w-10 h-10 rounded-full bg-primary/20 mb-4 animate-spin"></div>
+        <div className="text-primary">Loading your puzzle...</div>
       </div>
-    );
-  }
+    </div>
+  );
 
   const startNewGame = () => {
     const { puzzle, solution } = generateSudoku(difficulty);
@@ -161,38 +167,91 @@ const SudokuBoard = ({ difficulty }: SudokuBoardProps) => {
     setReadOnlyCells(readOnly);
   };
 
+  // simple animated dots for confetti effect
+  const renderConfetti = () => {
+    if (!confetti) return null;
+    
+    const dots = [];
+    const colors = ['bg-red-500', 'bg-blue-500', 'bg-green-500', 'bg-yellow-500', 'bg-purple-500', 'bg-pink-500'];
+    
+    for (let i = 0; i < 50; i++) {
+      const size = Math.floor(Math.random() * 10) + 5;
+      const left = Math.floor(Math.random() * 100);
+      const animationDuration = (Math.random() * 1) + 0.5;
+      const color = colors[Math.floor(Math.random() * colors.length)];
+      
+      dots.push(
+        <div 
+          key={i}
+          className={`absolute rounded-full ${color}`}
+          style={{
+            width: `${size}px`,
+            height: `${size}px`,
+            left: `${left}%`,
+            top: '-20px',
+            animation: `fall ${animationDuration}s linear forwards`
+          }}
+        />
+      );
+    }
+    
+    return dots;
+  };
+
+  // add falling confetti animation styles
+  useEffect(() => {
+    // add keyframes for falling animation
+    const styleEl = document.createElement('style');
+    styleEl.textContent = `
+      @keyframes fall {
+        0% { transform: translateY(-10px); opacity: 1; }
+        80% { opacity: 0.8; }
+        100% { transform: translateY(400px); opacity: 0; }
+      }
+    `;
+    document.head.appendChild(styleEl);
+    
+    return () => {
+      document.head.removeChild(styleEl);
+    };
+  }, []);
+
   return (
     <div className="relative">
-      <div className="sudoku-grid w-full max-w-md mx-auto">
-        {grid.map((row, rowIndex) => 
-          row.map((cell, colIndex) => (
-            <SudokuCell
-              key={`${rowIndex},${colIndex}`}
-              value={cell}
-              row={rowIndex}
-              col={colIndex}
-              isReadOnly={readOnlyCells[`${rowIndex},${colIndex}`] || false}
-              isSelected={selectedCell?.row === rowIndex && selectedCell?.col === colIndex}
-              isError={errorCells[`${rowIndex},${colIndex}`] || false}
-              onClick={() => handleCellClick(rowIndex, colIndex)}
-            />
-          ))
-        )}
+      <div className="rounded-xl p-2 bg-white shadow-lg relative overflow-hidden">
+        {renderConfetti()}
+        <div className="text-xs uppercase tracking-wider text-center font-medium text-muted-foreground mb-2">Sudoku Board</div>
+        <div className="sudoku-grid w-full max-w-md mx-auto">
+          {grid.map((row, rowIndex) => 
+            row.map((cell, colIndex) => (
+              <SudokuCell
+                key={`${rowIndex},${colIndex}`}
+                value={cell}
+                row={rowIndex}
+                col={colIndex}
+                isReadOnly={readOnlyCells[`${rowIndex},${colIndex}`] || false}
+                isSelected={selectedCell?.row === rowIndex && selectedCell?.col === colIndex}
+                isError={errorCells[`${rowIndex},${colIndex}`] || false}
+                onClick={() => handleCellClick(rowIndex, colIndex)}
+              />
+            ))
+          )}
+        </div>
       </div>
       
       {isComplete && (
-        <div className="absolute inset-0 flex items-center justify-center bg-white/90 backdrop-blur-sm rounded-xl z-10">
-          <div className="bg-white p-8 rounded-xl shadow-lg text-center max-w-xs mx-auto border border-indigo-200">
-            <div className="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-indigo-600" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+        <div className="absolute inset-0 flex items-center justify-center bg-background/90 backdrop-blur-sm rounded-xl z-10">
+          <div className="bg-white p-8 rounded-xl shadow-xl text-center max-w-xs mx-auto border border-primary/20 animate-bounce-once">
+            <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-primary" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
               </svg>
             </div>
-            <h2 className="text-2xl font-bold text-indigo-600 mb-2">congratulations!</h2>
-            <p className="text-gray-500 mb-6">you've successfully completed the puzzle!</p>
+            <h2 className="text-2xl font-bold text-primary mb-2">Amazing!</h2>
+            <p className="text-muted-foreground mb-6">You've successfully completed the puzzle!</p>
             <button 
               onClick={startNewGame}
-              className="px-6 py-3 bg-indigo-600 text-white rounded-lg transition-all hover:bg-indigo-700 font-medium w-full"
+              className="px-6 py-3 bg-gradient-to-r from-primary to-primary/80 text-primary-foreground rounded-lg transition-all hover:bg-primary/90 font-medium w-full hover:shadow-md"
             >
               Play Again
             </button>
