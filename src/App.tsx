@@ -55,11 +55,11 @@ function App() {
                 Hard
               </button>
             </div>
-            <div className="mt-6">
+            <div className="mt-10 flex justify-center">
               <button
                 onClick={handleStartGame}
                 disabled={!selectedMenuDifficulty}
-                className={`w-full py-4 px-6 rounded-xl ${!selectedMenuDifficulty ? 'opacity-50 cursor-not-allowed' : ''} glass-button-primary font-medium`}
+                className={`px-12 py-3 rounded-full ${!selectedMenuDifficulty ? 'opacity-50 cursor-not-allowed' : ''} glass-button-primary font-medium no-pop`}
               >
                 Start Game
               </button>

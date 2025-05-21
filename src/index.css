@@ -132,6 +132,11 @@
   transform: translateY(0);
 }
 
+/* Override hover transform for buttons with no-pop class */
+.no-pop:hover {
+  transform: none !important;
+}
+
 .sudoku-grid {
   display: grid;
   grid-template-columns: repeat(9, 1fr);
