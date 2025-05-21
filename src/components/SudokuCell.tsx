@@ -25,7 +25,7 @@ const SudokuCell = ({
     isReadOnly ? 'readonly' : '',
     isError ? 'error' : '',
     // add subtle background color to every other 3x3 box for better visual separation
-    ((Math.floor(row / 3) + Math.floor(col / 3)) % 2 === 0) ? 'bg-white' : 'bg-secondary/30'
+    ((Math.floor(row / 3) + Math.floor(col / 3)) % 2 === 0) ? 'bg-white' : 'bg-indigo-50'
   ].filter(Boolean).join(' ');
 
   return (
