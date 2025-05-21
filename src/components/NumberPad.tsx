@@ -22,19 +22,21 @@ const NumberPad = () => {
   };
 
   return (
-    <div className="number-pad grid grid-cols-3 gap-3 w-full max-w-xs">
-      {numbers.map(number => (
-        <button
-          key={number}
-          className="p-4 rounded-xl glass-button text-lg font-medium text-primary"
-          onClick={() => handleNumberClick(number)}
-          aria-label={`Enter ${number}`}
-        >
-          {number}
-        </button>
-      ))}
+    <div className="w-full max-w-[200px] mx-auto">
+      <div className="grid grid-cols-3 gap-2 mb-2">
+        {numbers.map(number => (
+          <button
+            key={number}
+            className="p-3 rounded-lg glass-button text-lg font-medium text-primary aspect-square flex items-center justify-center"
+            onClick={() => handleNumberClick(number)}
+            aria-label={`Enter ${number}`}
+          >
+            {number}
+          </button>
+        ))}
+      </div>
       <button
-        className="p-4 rounded-xl glass-button text-destructive col-span-3 font-medium"
+        className="p-2 rounded-lg glass-button text-destructive w-full font-medium"
         onClick={handleClearClick}
         aria-label="Clear selected cell"
       >

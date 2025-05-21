@@ -200,7 +200,7 @@ const SudokuBoard = ({ difficulty, onBackToMenu }: SudokuBoardProps) => {
   };
 
   return (
-    <div className="flex flex-col gap-4 w-full max-w-md">
+    <div className="flex flex-col gap-4 w-full max-w-sm">
       <GameControls 
         difficulty={difficulty}
         onNewGame={onBackToMenu || startNewGame}
@@ -208,7 +208,7 @@ const SudokuBoard = ({ difficulty, onBackToMenu }: SudokuBoardProps) => {
       />
       
       <div className="relative">
-        <div className="sudoku-grid w-full max-w-md mx-auto">
+        <div className="sudoku-grid w-full aspect-square mx-auto">
           {grid.map((row, rowIndex) => 
             row.map((cell, colIndex) => (
               <SudokuCell
