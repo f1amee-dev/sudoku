@@ -9,51 +9,53 @@ function App() {
   const [gameStarted, setGameStarted] = useState(false);
   
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-gradient-to-b from-indigo-50 to-white">
+    <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-gradient-to-b from-white to-secondary">
       <header className="mb-8 text-center">
-        <h1 className="text-4xl font-bold mb-2 text-indigo-600">Sudoku</h1>
-        <p className="text-indigo-400">Challenge your mind with a puzzle</p>
+        <h1 className="text-4xl font-bold mb-2 text-primary">Sudoku</h1>
+        <p className="text-muted-foreground">Challenge your mind with numbers</p>
       </header>
       
       {!gameStarted ? (
-        <div className="w-full max-w-md p-6 bg-white rounded-xl shadow-md border border-indigo-100">
-          <h2 className="text-xl font-semibold mb-4 text-indigo-600">Select Difficulty</h2>
+        <div className="w-full max-w-md p-8 bg-white rounded-2xl shadow-lg border border-border/50">
+          <h2 className="text-xl font-semibold mb-6 text-center">Select Difficulty</h2>
           <div className="flex flex-col gap-4">
             <button
               onClick={() => { setDifficulty('easy'); setGameStarted(true); }}
-              className="py-3 px-4 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 rounded-lg transition-colors font-medium"
+              className="py-4 px-6 bg-secondary hover:bg-secondary/70 text-secondary-foreground rounded-xl transition-all transform hover:scale-[1.01] active:scale-[0.99] font-medium"
             >
               Easy
             </button>
             <button
               onClick={() => { setDifficulty('medium'); setGameStarted(true); }}
-              className="py-3 px-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition-colors font-medium"
+              className="py-4 px-6 bg-primary/10 hover:bg-primary/20 text-primary rounded-xl transition-all transform hover:scale-[1.01] active:scale-[0.99] font-medium"
             >
               Medium
             </button>
             <button
               onClick={() => { setDifficulty('hard'); setGameStarted(true); }}
-              className="py-3 px-4 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 rounded-lg transition-colors font-medium"
+              className="py-4 px-6 bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl transition-all transform hover:scale-[1.01] active:scale-[0.99] font-medium shadow-sm"
             >
               Hard
             </button>
           </div>
         </div>
       ) : (
-        <div className="flex flex-col gap-8 items-center">
+        <div className="flex flex-col gap-8 items-center w-full max-w-4xl">
           <GameControls 
             onNewGame={() => setGameStarted(false)} 
             difficulty={difficulty}
           />
-          <div className="flex flex-col md:flex-row gap-8 items-center">
+          <div className="flex flex-col md:flex-row gap-8 items-center w-full justify-center">
             <SudokuBoard difficulty={difficulty} />
             <NumberPad />
           </div>
         </div>
       )}
       
-      <footer className="mt-8 text-sm text-indigo-400">
-        Made with ♥ and React + Tailwind
+      <footer className="mt-10 text-sm text-muted-foreground">
+        <span>Made with</span>
+        <span className="mx-1 text-primary">♥</span>
+        <span>and React + Tailwind</span>
       </footer>
     </div>
   );

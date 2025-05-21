@@ -130,11 +130,31 @@ const SudokuBoard = ({ difficulty }: SudokuBoardProps) => {
     };
   }, [selectedCell, readOnlyCells, isComplete]);
 
-  if (grid.length === 0) return <div>Loading...</div>;
+  if (grid.length === 0) return <div className="flex items-center justify-center p-8"><div className="animate-pulse text-primary">Loading...</div></div>;
+
+  const startNewGame = () => {
+    const { puzzle, solution } = generateSudoku(difficulty);
+    setGrid(puzzle);
+    setSolution(solution);
+    setSelectedCell(null);
+    setErrorCells({});
+    setIsComplete(false);
+    
+    // mark initial cells as read-only
+    const readOnly: Record<string, boolean> = {};
+    for (let row = 0; row < 9; row++) {
+      for (let col = 0; col < 9; col++) {
+        if (puzzle[row][col] !== null) {
+          readOnly[`${row},${col}`] = true;
+        }
+      }
+    }
+    setReadOnlyCells(readOnly);
+  };
 
   return (
     <div className="relative">
-      <div className="sudoku-grid w-full max-w-md mx-auto bg-white rounded-xl shadow-md border border-indigo-100">
+      <div className="sudoku-grid w-full max-w-md mx-auto">
         {grid.map((row, rowIndex) => 
           row.map((cell, colIndex) => (
             <SudokuCell
@@ -152,31 +172,18 @@ const SudokuBoard = ({ difficulty }: SudokuBoardProps) => {
       </div>
       
       {isComplete && (
-        <div className="absolute inset-0 flex items-center justify-center bg-white/80 backdrop-blur-sm rounded-xl">
-          <div className="bg-white p-6 rounded-xl shadow-lg text-center border border-indigo-100">
-            <h2 className="text-2xl font-bold text-indigo-600 mb-4">Congratulations!</h2>
-            <p className="mb-4 text-indigo-500">You've completed the puzzle!</p>
+        <div className="absolute inset-0 flex items-center justify-center bg-background/90 backdrop-blur-sm rounded-xl z-10">
+          <div className="bg-white p-8 rounded-xl shadow-lg text-center max-w-xs mx-auto border border-primary/20">
+            <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-primary" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+              </svg>
+            </div>
+            <h2 className="text-2xl font-bold text-primary mb-2">Congratulations!</h2>
+            <p className="text-muted-foreground mb-6">You've successfully completed the puzzle!</p>
             <button 
-              onClick={() => {
-                const { puzzle, solution } = generateSudoku(difficulty);
-                setGrid(puzzle);
-                setSolution(solution);
-                setSelectedCell(null);
-                setErrorCells({});
-                setIsComplete(false);
-                
-                // mark initial cells as read-only
-                const readOnly: Record<string, boolean> = {};
-                for (let row = 0; row < 9; row++) {
-                  for (let col = 0; col < 9; col++) {
-                    if (puzzle[row][col] !== null) {
-                      readOnly[`${row},${col}`] = true;
-                    }
-                  }
-                }
-                setReadOnlyCells(readOnly);
-              }}
-              className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-medium transition-colors"
+              onClick={startNewGame}
+              className="px-6 py-3 bg-primary text-primary-foreground rounded-lg transition-all hover:bg-primary/90 font-medium w-full"
             >
               Play Again
             </button>

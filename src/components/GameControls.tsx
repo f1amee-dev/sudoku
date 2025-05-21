@@ -33,27 +33,29 @@ const GameControls = ({ onNewGame, difficulty }: GameControlsProps) => {
   };
 
   return (
-    <div className="w-full max-w-md mx-auto p-4 bg-white rounded-xl shadow-md border border-indigo-100 flex flex-col md:flex-row items-center justify-between gap-4">
-      <div className="flex flex-col">
-        <span className="text-sm text-indigo-400">Difficulty</span>
-        <span className="font-medium text-indigo-600 capitalize">{difficulty}</span>
+    <div className="w-full max-w-md mx-auto p-5 bg-white rounded-xl shadow-md border border-border/30 flex flex-col md:flex-row items-center justify-between gap-4">
+      <div className="flex flex-col items-center md:items-start">
+        <span className="text-xs text-muted-foreground uppercase tracking-wide">Difficulty</span>
+        <span className="font-medium text-foreground capitalize">{difficulty}</span>
       </div>
 
-      <div className="flex flex-col text-center">
-        <span className="text-sm text-indigo-400">Time</span>
-        <span className="font-mono font-medium text-indigo-600">{formatTime(timeElapsed)}</span>
+      <div className="flex flex-col items-center">
+        <span className="text-xs text-muted-foreground uppercase tracking-wide">Time</span>
+        <span className="font-mono font-medium text-foreground">{formatTime(timeElapsed)}</span>
       </div>
 
       <div className="flex gap-2">
         <button
           onClick={() => setIsTimerRunning(!isTimerRunning)}
-          className="p-2 bg-indigo-50 hover:bg-indigo-100 rounded-lg text-indigo-600 text-sm font-medium transition-colors"
+          className="py-2 px-4 bg-secondary hover:bg-secondary/70 text-secondary-foreground rounded-lg transition-all text-sm font-medium"
+          aria-label={isTimerRunning ? 'Pause game' : 'Resume game'}
         >
           {isTimerRunning ? 'Pause' : 'Resume'}
         </button>
         <button
           onClick={onNewGame}
-          className="p-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-sm font-medium transition-colors"
+          className="py-2 px-4 bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg transition-all text-sm font-medium"
+          aria-label="Start a new game"
         >
           New Game
         </button>

@@ -19,35 +19,23 @@ const SudokuCell = ({
   isError,
   onClick
 }: SudokuCellProps) => {
-  const getBorderStyles = () => {
-    let classes = "";
-    
-    // right borders for 3x3 grid
-    if (col === 2 || col === 5) {
-      classes += " border-r-2 border-r-indigo-200";
-    }
-    
-    // bottom borders for 3x3 grid
-    if (row === 2 || row === 5) {
-      classes += " border-b-2 border-b-indigo-200";
-    }
-    
-    return classes;
-  };
+  const classNames = [
+    'sudoku-cell',
+    isSelected ? 'selected' : '',
+    isReadOnly ? 'readonly' : '',
+    isError ? 'error' : '',
+    // add subtle background color to every other 3x3 box for better visual separation
+    ((Math.floor(row / 3) + Math.floor(col / 3)) % 2 === 0) ? 'bg-white' : 'bg-secondary/30'
+  ].filter(Boolean).join(' ');
 
   return (
     <div
-      className={`
-        flex items-center justify-center aspect-square
-        text-lg font-medium transition-all duration-200
-        ${isSelected ? 'bg-indigo-100' : 'bg-white hover:bg-indigo-50'}
-        ${isReadOnly ? 'font-bold text-indigo-600' : 'text-indigo-800'}
-        ${isError ? 'text-red-500' : ''}
-        ${getBorderStyles()}
-      `}
+      className={classNames}
       onClick={onClick}
       data-row={row}
       data-col={col}
+      aria-selected={isSelected}
+      role="gridcell"
     >
       {value || ''}
     </div>
