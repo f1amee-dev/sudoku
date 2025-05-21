@@ -10,26 +10,27 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "react": "latest",
-    "react-dom": "latest",
-    "lucide-react": "latest",
+    "@tailwindcss/postcss": "^4.1.7",
     "class-variance-authority": "latest",
     "clsx": "latest",
+    "lucide-react": "latest",
+    "react": "latest",
+    "react-dom": "latest",
     "tailwind-merge": "latest"
   },
   "devDependencies": {
-    "@vitejs/plugin-react": "latest",
-    "vite": "latest",
-    "tailwindcss": "latest",
-    "postcss": "latest",
-    "autoprefixer": "latest",
-    "typescript": "latest",
     "@types/react": "latest",
     "@types/react-dom": "latest",
     "@typescript-eslint/eslint-plugin": "latest",
     "@typescript-eslint/parser": "latest",
+    "@vitejs/plugin-react": "latest",
+    "autoprefixer": "latest",
     "eslint": "latest",
     "eslint-plugin-react-hooks": "latest",
-    "eslint-plugin-react-refresh": "latest"
+    "eslint-plugin-react-refresh": "latest",
+    "postcss": "latest",
+    "tailwindcss": "latest",
+    "typescript": "latest",
+    "vite": "latest"
   }
-} 
+}
