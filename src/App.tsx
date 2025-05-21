@@ -25,19 +25,19 @@ function App() {
             <div className="grid grid-cols-3 gap-4">
               <button
                 onClick={() => { setDifficulty('easy'); setGameStarted(true); }}
-                className="py-4 px-6 rounded-xl glass-button font-medium"
+                className={`py-4 px-6 rounded-xl ${difficulty === 'easy' ? 'glass-button-primary' : 'glass-button'} font-medium`}
               >
                 Easy
               </button>
               <button
                 onClick={() => { setDifficulty('medium'); setGameStarted(true); }}
-                className="py-4 px-6 rounded-xl glass-button font-medium"
+                className={`py-4 px-6 rounded-xl ${difficulty === 'medium' ? 'glass-button-primary' : 'glass-button'} font-medium`}
               >
                 Medium
               </button>
               <button
                 onClick={() => { setDifficulty('hard'); setGameStarted(true); }}
-                className="py-4 px-6 rounded-xl glass-button-primary font-medium shadow-sm"
+                className={`py-4 px-6 rounded-xl ${difficulty === 'hard' ? 'glass-button-primary' : 'glass-button'} font-medium`}
               >
                 Hard
               </button>
