@@ -26,14 +26,14 @@ const NumberPad = () => {
       {numbers.map(number => (
         <button
           key={number}
-          className="p-3 bg-card hover:bg-accent text-foreground rounded-md text-lg font-medium transition-colors"
+          className="p-3 bg-white hover:bg-gray-100 rounded-md text-lg font-medium transition-colors"
           onClick={() => handleNumberClick(number)}
         >
           {number}
         </button>
       ))}
       <button
-        className="p-3 bg-destructive/10 hover:bg-destructive/20 text-destructive-foreground rounded-md col-span-3 text-sm font-medium transition-colors"
+        className="p-3 bg-red-50 hover:bg-red-100 text-red-800 rounded-md col-span-3 text-sm font-medium transition-colors"
         onClick={handleClearClick}
       >
         Clear
