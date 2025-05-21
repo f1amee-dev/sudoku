@@ -1,4 +1,3 @@
-import React from 'react';
 import { SudokuBoard } from '@/components/SudokuBoard';
 import { NumberPad } from '@/components/NumberPad';
 import { GameControls } from '@/components/GameControls';

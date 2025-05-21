@@ -1,4 +1,4 @@
-import { CellValue, Difficulty, SudokuGrid } from "@/types/sudoku";
+import { Difficulty, SudokuGrid } from "@/types/sudoku";
 
 // generate a solved sudoku grid
 export function generateSolvedGrid(): SudokuGrid {

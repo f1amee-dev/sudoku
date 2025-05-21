@@ -1,10 +1,10 @@
 import { create } from 'zustand';
-import { CellPosition, CellState, Difficulty, GameState, SudokuBoardState, SudokuGrid } from '@/types/sudoku';
-import { createPuzzle, generateSolvedGrid, isValidValue } from './sudokuGenerator';
+import { CellPosition, Difficulty, GameState, SudokuBoardState, SudokuGrid } from '@/types/sudoku';
+import { createPuzzle, generateSolvedGrid } from './sudokuGenerator';
 
-const createInitialBoard = (puzzle: SudokuGrid, solution: SudokuGrid): SudokuBoardState => {
-  return puzzle.map((row, rowIndex) =>
-    row.map((cell, colIndex) => ({
+const createInitialBoard = (puzzle: SudokuGrid): SudokuBoardState => {
+  return puzzle.map((row) =>
+    row.map((cell) => ({
       value: cell,
       isGiven: cell !== null,
       isValid: true,
@@ -16,7 +16,7 @@ const createInitialBoard = (puzzle: SudokuGrid, solution: SudokuGrid): SudokuBoa
 const createInitialState = (difficulty: Difficulty): GameState => {
   const solution = generateSolvedGrid();
   const puzzle = createPuzzle(solution, difficulty);
-  const board = createInitialBoard(puzzle, solution);
+  const board = createInitialBoard(puzzle);
   
   return {
     board,
