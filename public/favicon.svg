@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+  <style>
+    .grid {
+      stroke: #213547;
+      stroke-width: 1.5;
+    }
+    .thick-line {
+      stroke: #213547;
+      stroke-width: 2.5;
+    }
+    .number {
+      fill: #646cff;
+      font-family: Arial, sans-serif;
+      font-weight: bold;
+      font-size: 9px;
+    }
+    @media (prefers-color-scheme: dark) {
+      .grid {
+        stroke: #ffffff;
+      }
+      .thick-line {
+        stroke: #ffffff;
+      }
+      .number {
+        fill: #747bff;
+      }
+    }
+  </style>
+  
+  <!-- Background -->
+  <rect width="32" height="32" rx="4" fill="none" />
+  
+  <!-- Grid lines -->
+  <!-- Horizontal lines -->
+  <line x1="2" y1="2" x2="30" y2="2" class="thick-line" />
+  <line x1="2" y1="12" x2="30" y2="12" class="thick-line" />
+  <line x1="2" y1="22" x2="30" y2="22" class="thick-line" />
+  <line x1="2" y1="30" x2="30" y2="30" class="thick-line" />
+  
+  <line x1="2" y1="6" x2="30" y2="6" class="grid" />
+  <line x1="2" y1="16" x2="30" y2="16" class="grid" />
+  <line x1="2" y1="26" x2="30" y2="26" class="grid" />
+  
+  <!-- Vertical lines -->
+  <line x1="2" y1="2" x2="2" y2="30" class="thick-line" />
+  <line x1="12" y1="2" x2="12" y2="30" class="thick-line" />
+  <line x1="22" y1="2" x2="22" y2="30" class="thick-line" />
+  <line x1="30" y1="2" x2="30" y2="30" class="thick-line" />
+  
+  <line x1="6" y1="2" x2="6" y2="30" class="grid" />
+  <line x1="16" y1="2" x2="16" y2="30" class="grid" />
+  <line x1="26" y1="2" x2="26" y2="30" class="grid" />
+  
+  <!-- Sample numbers -->
+  <text x="4" y="10" class="number">5</text>
+  <text x="14" y="20" class="number">9</text>
+  <text x="24" y="10" class="number">3</text>
+  <text x="4" y="28" class="number">7</text>
+  <text x="24" y="28" class="number">1</text>
+</svg> 
