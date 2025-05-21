@@ -17,8 +17,16 @@ function App() {
         <NumberPad />
       </div>
       
-      <footer className="mt-8 text-xs text-muted-foreground">
-        Built with React, TypeScript, Tailwind CSS, and Shadcn/ui
+      <footer className="mt-8 text-xs text-muted-foreground flex flex-col items-center">
+        <div>
+          Built with React, TypeScript, Tailwind CSS, and Shadcn/ui
+        </div>
+        <div className="mt-2">
+          Made with <span className="text-red-500">❤</span> by <a href="https://github.com/f1amee-dev/" className="text-primary hover:underline" target="_blank" rel="noopener noreferrer">Filip</a>
+        </div>
+        <div className="mt-1">
+          &copy; {new Date().getFullYear()} All rights reserved
+        </div>
       </footer>
     </div>
   );
