@@ -5,10 +5,23 @@ import { Difficulty } from './types/sudoku';
 
 function App() {
   const [difficulty, setDifficulty] = useState<Difficulty>('medium');
+  const [selectedMenuDifficulty, setSelectedMenuDifficulty] = useState<Difficulty | null>(null);
   const [gameStarted, setGameStarted] = useState(false);
   
   const handleBackToMenu = () => {
     setGameStarted(false);
+    setSelectedMenuDifficulty(null);
+  };
+
+  const handleDifficultySelect = (selected: Difficulty) => {
+    setSelectedMenuDifficulty(selected);
+  };
+
+  const handleStartGame = () => {
+    if (selectedMenuDifficulty) {
+      setDifficulty(selectedMenuDifficulty);
+      setGameStarted(true);
+    }
   };
   
   return (
@@ -24,22 +37,31 @@ function App() {
             <h2 className="text-xl font-semibold mb-6 text-center">Select Difficulty</h2>
             <div className="grid grid-cols-3 gap-4">
               <button
-                onClick={() => { setDifficulty('easy'); setGameStarted(true); }}
-                className={`py-4 px-6 rounded-xl ${difficulty === 'easy' ? 'glass-button-primary' : 'glass-button'} font-medium`}
+                onClick={() => handleDifficultySelect('easy')}
+                className={`py-4 px-6 rounded-xl ${selectedMenuDifficulty === 'easy' ? 'glass-button-primary' : 'glass-button'} font-medium`}
               >
                 Easy
               </button>
               <button
-                onClick={() => { setDifficulty('medium'); setGameStarted(true); }}
-                className={`py-4 px-6 rounded-xl ${difficulty === 'medium' ? 'glass-button-primary' : 'glass-button'} font-medium`}
+                onClick={() => handleDifficultySelect('medium')}
+                className={`py-4 px-6 rounded-xl ${selectedMenuDifficulty === 'medium' ? 'glass-button-primary' : 'glass-button'} font-medium`}
               >
                 Medium
               </button>
               <button
-                onClick={() => { setDifficulty('hard'); setGameStarted(true); }}
-                className={`py-4 px-6 rounded-xl ${difficulty === 'hard' ? 'glass-button-primary' : 'glass-button'} font-medium`}
+                onClick={() => handleDifficultySelect('hard')}
+                className={`py-4 px-6 rounded-xl ${selectedMenuDifficulty === 'hard' ? 'glass-button-primary' : 'glass-button'} font-medium`}
               >
                 Hard
+              </button>
+            </div>
+            <div className="mt-6">
+              <button
+                onClick={handleStartGame}
+                disabled={!selectedMenuDifficulty}
+                className={`w-full py-4 px-6 rounded-xl ${!selectedMenuDifficulty ? 'opacity-50 cursor-not-allowed' : ''} glass-button-primary font-medium`}
+              >
+                Start Game
               </button>
             </div>
           </div>
