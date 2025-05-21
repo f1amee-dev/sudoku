@@ -55,15 +55,6 @@ function App() {
                 Hard
               </button>
             </div>
-            <div className="mt-10 flex justify-center">
-              <button
-                onClick={handleStartGame}
-                disabled={!selectedMenuDifficulty}
-                className={`px-12 py-3 rounded-full ${!selectedMenuDifficulty ? 'opacity-50 cursor-not-allowed' : ''} glass-button-primary font-medium no-pop`}
-              >
-                Start Game
-              </button>
-            </div>
           </div>
         ) : (
           <div className="flex flex-col md:flex-row gap-8 items-start justify-center">
@@ -72,6 +63,18 @@ function App() {
               onBackToMenu={handleBackToMenu}
             />
             <NumberPad />
+          </div>
+        )}
+        
+        {!gameStarted && (
+          <div className="mt-12">
+            <button
+              onClick={handleStartGame}
+              disabled={!selectedMenuDifficulty}
+              className={`px-16 py-4 rounded-full ${!selectedMenuDifficulty ? 'opacity-50 cursor-not-allowed' : ''} start-game-button font-medium text-lg no-pop`}
+            >
+              Start Game
+            </button>
           </div>
         )}
         

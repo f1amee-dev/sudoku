@@ -132,6 +132,23 @@
   transform: translateY(0);
 }
 
+.start-game-button {
+  background: rgb(79, 70, 229);
+  border: none;
+  box-shadow: 0 6px 24px rgba(79, 70, 229, 0.4);
+  color: white;
+  transition: all 0.2s ease;
+}
+
+.start-game-button:hover {
+  background: rgb(67, 56, 202);
+  box-shadow: 0 8px 28px rgba(79, 70, 229, 0.5);
+}
+
+.start-game-button:active {
+  box-shadow: 0 4px 16px rgba(79, 70, 229, 0.3);
+}
+
 /* Override hover transform for buttons with no-pop class */
 .no-pop:hover {
   transform: none !important;
