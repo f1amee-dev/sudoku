@@ -1,216 +1,175 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@custom-variant dark (&:is(.dark *));
 
 @layer base {
   :root {
     --background: 0 0% 100%;
-    --foreground: 240 33% 11%;
-
+    --foreground: 222.2 84% 4.9%;
     --card: 0 0% 100%;
-    --card-foreground: 240 33% 11%;
-
+    --card-foreground: 222.2 84% 4.9%;
     --popover: 0 0% 100%;
-    --popover-foreground: 240 33% 11%;
-
-    --primary: 244 62% 60%;
-    --primary-foreground: 0 0% 100%;
-
-    --secondary: 244 62% 97%;
-    --secondary-foreground: 244 62% 60%;
-
-    --muted: 240 10% 96.1%;
-    --muted-foreground: 240 5% 50%;
-
-    --accent: 244 62% 95%;
-    --accent-foreground: 244 62% 60%;
-
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 221.2 83.2% 53.3%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 100%;
-
-    --border: 240 10% 90%;
-    --input: 240 10% 90%;
-    --ring: 244 62% 60%;
-
-    --radius: 0.75rem;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 221.2 83.2% 53.3%;
+    --radius: 0.5rem;
   }
 
   .dark {
-    --background: 240 20% 9%;
-    --foreground: 0 0% 98%;
-
-    --card: 240 20% 9%;
-    --card-foreground: 0 0% 98%;
-
-    --popover: 240 20% 9%;
-    --popover-foreground: 0 0% 98%;
-
-    --primary: 244 62% 60%;
-    --primary-foreground: 0 0% 100%;
-
-    --secondary: 244 30% 20%;
-    --secondary-foreground: 0 0% 98%;
-
-    --muted: 240 15% 15%;
-    --muted-foreground: 240 5% 65%;
-
-    --accent: 244 30% 20%;
-    --accent-foreground: 0 0% 98%;
-
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 217.2 91.2% 59.8%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
     --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-
-    --border: 240 15% 20%;
-    --input: 240 15% 20%;
-    --ring: 244 62% 60%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 224.3 76.3% 48%;
   }
 }
 
 @layer base {
   * {
-    border-color: hsl(var(--border));
+    @apply border-border;
   }
   body {
-    background-color: hsl(var(--background));
-    color: hsl(var(--foreground));
-    font-feature-settings: "rlig" 1, "calt" 1;
-    background-image: radial-gradient(
-      circle at top right,
-      rgba(79, 70, 229, 0.15) 0%,
-      transparent 50%
-    ),
-    radial-gradient(
-      circle at bottom left,
-      rgba(79, 70, 229, 0.1) 0%,
-      transparent 50%
-    );
-    background-attachment: fixed;
+    @apply bg-background text-foreground;
   }
 }
 
-.glass-panel {
-  background: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  box-shadow: 0 8px 32px 0 rgba(79, 70, 229, 0.1);
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
 }
 
-.glass-button {
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(5px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.1);
-  transition: all 0.2s ease;
+:root {
+  --radius: 0.625rem;
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
 }
 
-.glass-button:hover {
-  background: rgba(255, 255, 255, 0.9);
-  box-shadow: 0 4px 16px rgba(79, 70, 229, 0.2);
-  transform: translateY(-2px);
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.556 0 0);
 }
 
-.glass-button:active {
-  transform: translateY(0);
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
 }
-
-.glass-button-primary {
-  background: rgba(79, 70, 229, 0.8);
-  backdrop-filter: blur(5px);
-  border: 1px solid rgba(79, 70, 229, 0.3);
-  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
-  color: white;
-  transition: all 0.2s ease;
-}
-
-.glass-button-primary:hover {
-  background: rgba(79, 70, 229, 0.9);
-  box-shadow: 0 4px 16px rgba(79, 70, 229, 0.4);
-  transform: translateY(-2px);
-}
-
-.glass-button-primary:active {
-  transform: translateY(0);
-}
-
-.start-game-button {
-  background: rgb(79, 70, 229);
-  border: none;
-  box-shadow: 0 6px 24px rgba(79, 70, 229, 0.4);
-  color: white;
-  transition: all 0.2s ease;
-}
-
-.start-game-button:hover {
-  background: rgb(67, 56, 202);
-  box-shadow: 0 8px 28px rgba(79, 70, 229, 0.5);
-}
-
-.start-game-button:active {
-  box-shadow: 0 4px 16px rgba(79, 70, 229, 0.3);
-}
-
-/* Override hover transform for buttons with no-pop class */
-.no-pop:hover {
-  transform: none !important;
-}
-
-.sudoku-grid {
-  display: grid;
-  grid-template-columns: repeat(9, 1fr);
-  grid-template-rows: repeat(9, 1fr);
-  gap: 1px;
-  background-color: rgba(79, 70, 229, 0.2);
-  padding: 2px;
-  border-radius: var(--radius);
-  box-shadow: 0 8px 32px rgba(79, 70, 229, 0.15);
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  backdrop-filter: blur(5px);
-  overflow: hidden;
-}
-
-.sudoku-cell {
-  aspect-ratio: 1/1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.125rem;
-  font-weight: 500;
-  background-color: rgba(255, 255, 255, 0.9);
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.sudoku-cell:hover {
-  background-color: hsl(var(--accent));
-}
-
-.sudoku-cell.selected {
-  background-color: hsl(var(--accent));
-  color: hsl(var(--accent-foreground));
-  position: relative;
-  z-index: 1;
-  box-shadow: 0 0 0 2px hsl(var(--ring));
-}
-
-.sudoku-cell.readonly {
-  font-weight: 700;
-  color: hsl(var(--primary));
-}
-
-.sudoku-cell.error {
-  color: hsl(var(--destructive));
-}
-
-/* Add borders for 3x3 boxes */
-.sudoku-cell:nth-child(3n) {
-  border-right: 2px solid rgba(79, 70, 229, 0.2);
-}
-
-.sudoku-cell:nth-child(9n) {
-  border-right: none;
-}
-
-.sudoku-grid > div:nth-child(n+19):nth-child(-n+27),
-.sudoku-grid > div:nth-child(n+46):nth-child(-n+54) {
-  border-bottom: 2px solid rgba(79, 70, 229, 0.2);
-} 

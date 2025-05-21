@@ -1,91 +1,35 @@
-import { useState } from 'react';
-import SudokuBoard from './components/SudokuBoard';
-import NumberPad from './components/NumberPad';
-import { Difficulty } from './types/sudoku';
+import { useState } from 'react'
+import reactLogo from './assets/react.svg'
+import viteLogo from '/vite.svg'
+import './App.css'
 
 function App() {
-  const [difficulty, setDifficulty] = useState<Difficulty>('medium');
-  const [selectedMenuDifficulty, setSelectedMenuDifficulty] = useState<Difficulty | null>(null);
-  const [gameStarted, setGameStarted] = useState(false);
-  
-  const handleBackToMenu = () => {
-    setGameStarted(false);
-    setSelectedMenuDifficulty(null);
-  };
+  const [count, setCount] = useState(0)
 
-  const handleDifficultySelect = (selected: Difficulty) => {
-    setSelectedMenuDifficulty(selected);
-  };
-
-  const handleStartGame = () => {
-    if (selectedMenuDifficulty) {
-      setDifficulty(selectedMenuDifficulty);
-      setGameStarted(true);
-    }
-  };
-  
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-gradient-to-b from-white to-secondary/30">
-      <div className="w-full max-w-4xl mx-auto flex flex-col items-center">
-        <header className="mb-8 text-center">
-          <h1 className="text-5xl font-bold mb-2 text-primary">Sudoku</h1>
-          <p className="text-muted-foreground">Challenge your mind with numbers</p>
-        </header>
-        
-        {!gameStarted ? (
-          <div className="w-full max-w-md p-8 rounded-2xl shadow-lg glass-panel">
-            <h2 className="text-xl font-semibold mb-6 text-center">Select Difficulty</h2>
-            <div className="grid grid-cols-3 gap-4">
-              <button
-                onClick={() => handleDifficultySelect('easy')}
-                className={`py-4 px-6 rounded-xl ${selectedMenuDifficulty === 'easy' ? 'glass-button-primary' : 'glass-button'} font-medium`}
-              >
-                Easy
-              </button>
-              <button
-                onClick={() => handleDifficultySelect('medium')}
-                className={`py-4 px-6 rounded-xl ${selectedMenuDifficulty === 'medium' ? 'glass-button-primary' : 'glass-button'} font-medium`}
-              >
-                Medium
-              </button>
-              <button
-                onClick={() => handleDifficultySelect('hard')}
-                className={`py-4 px-6 rounded-xl ${selectedMenuDifficulty === 'hard' ? 'glass-button-primary' : 'glass-button'} font-medium`}
-              >
-                Hard
-              </button>
-            </div>
-          </div>
-        ) : (
-          <div className="flex flex-col md:flex-row gap-8 items-start justify-center">
-            <SudokuBoard 
-              difficulty={difficulty} 
-              onBackToMenu={handleBackToMenu}
-            />
-            <NumberPad />
-          </div>
-        )}
-        
-        {!gameStarted && (
-          <div className="mt-12">
-            <button
-              onClick={handleStartGame}
-              disabled={!selectedMenuDifficulty}
-              className={`px-16 py-4 rounded-full ${!selectedMenuDifficulty ? 'opacity-50 cursor-not-allowed' : ''} start-game-button font-medium text-lg no-pop`}
-            >
-              Start Game
-            </button>
-          </div>
-        )}
-        
-        <footer className="mt-10 text-sm text-muted-foreground">
-          <span>Made with</span>
-          <span className="mx-1 text-primary">♥</span>
-          <span>and React + Tailwind</span>
-        </footer>
+    <>
+      <div>
+        <a href="https://vite.dev" target="_blank">
+          <img src={viteLogo} className="logo" alt="Vite logo" />
+        </a>
+        <a href="https://react.dev" target="_blank">
+          <img src={reactLogo} className="logo react" alt="React logo" />
+        </a>
       </div>
-    </div>
-  );
+      <h1>Vite + React</h1>
+      <div className="card">
+        <button onClick={() => setCount((count) => count + 1)}>
+          count is {count}
+        </button>
+        <p>
+          Edit <code>src/App.tsx</code> and save to test HMR
+        </p>
+      </div>
+      <p className="read-the-docs">
+        Click on the Vite and React logos to learn more
+      </p>
+    </>
+  )
 }
 
-export default App;
+export default App
