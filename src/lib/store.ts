@@ -1,5 +1,14 @@
 import { create } from 'zustand';
-import { CellPosition, Difficulty, GameState, SudokuBoardState, SudokuGrid } from '@/types/sudoku';
+import {
+  CellPosition,
+  Difficulty,
+  GameMode,
+  GameSettings,
+  GameState,
+  GridSize,
+  SudokuBoardState,
+  SudokuGrid,
+} from '@/types/sudoku';
 import { createPuzzle, generateSolvedGrid } from './sudokuGenerator';
 
 const createInitialBoard = (puzzle: SudokuGrid): SudokuBoardState => {
@@ -13,27 +22,48 @@ const createInitialBoard = (puzzle: SudokuGrid): SudokuBoardState => {
   );
 };
 
-const createInitialState = (difficulty: Difficulty): GameState => {
-  const solution = generateSolvedGrid();
-  const puzzle = createPuzzle(solution, difficulty);
+const DEFAULT_SETTINGS: GameSettings = {
+  difficulty: Difficulty.Medium,
+  gridSize: GridSize.Nine,
+  mode: GameMode.Classic,
+};
+
+const baseSymbols = '123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+const buildSymbolSet = (gridSize: GridSize): string[] => {
+  if (gridSize <= 0) return [];
+  if (gridSize <= baseSymbols.length) {
+    return baseSymbols
+      .slice(0, gridSize)
+      .split('');
+  }
+
+  return Array.from({ length: gridSize }, (_, idx) => String(idx + 1));
+};
+
+const createInitialState = (settings: GameSettings): GameState => {
+  const solution = generateSolvedGrid(settings);
+  const puzzle = createPuzzle(solution, settings);
   const board = createInitialBoard(puzzle);
+  const symbols = buildSymbolSet(settings.gridSize);
   
   return {
     board,
     originalBoard: puzzle,
     solution,
     selectedCell: null,
-    difficulty,
+    settings,
     isComplete: false,
     timer: 0,
     mistakes: 0,
-    isNoteMode: false
+    isNoteMode: false,
+    symbols,
   };
 };
 
 export const useGameStore = create<
   GameState & {
-    initializeGame: (difficulty: Difficulty) => void;
+    initializeGame: (settings: GameSettings) => void;
     selectCell: (position: CellPosition) => void;
     setCellValue: (value: number | null) => void;
     toggleNoteMode: () => void;
@@ -43,10 +73,10 @@ export const useGameStore = create<
     resetGame: () => void;
   }
 >((set, get) => ({
-  ...createInitialState(Difficulty.Medium),
+  ...createInitialState(DEFAULT_SETTINGS),
   
-  initializeGame: (difficulty) => {
-    set(createInitialState(difficulty));
+  initializeGame: (settings) => {
+    set(createInitialState(settings));
   },
   
   selectCell: (position) => {
@@ -54,7 +84,7 @@ export const useGameStore = create<
   },
   
   setCellValue: (value) => {
-    const { selectedCell, board, solution } = get();
+    const { selectedCell, board, solution, settings } = get();
     
     if (!selectedCell) return;
     
@@ -62,6 +92,7 @@ export const useGameStore = create<
     const cell = board[row][col];
     
     if (cell.isGiven) return;
+    if (value !== null && (value < 1 || value > settings.gridSize)) return;
     
     const isValid = value === null || value === solution[row][col];
     const newMistakes = !isValid ? get().mistakes + 1 : get().mistakes;
@@ -87,9 +118,11 @@ export const useGameStore = create<
   },
   
   toggleCellNote: (value) => {
-    const { selectedCell, board, isNoteMode } = get();
+    const { selectedCell, board, isNoteMode, settings } = get();
     
     if (!selectedCell || !isNoteMode) return;
+    
+    if (value < 1 || value > settings.gridSize) return;
     
     const { row, col } = selectedCell;
     const cell = board[row][col];
@@ -126,7 +159,7 @@ export const useGameStore = create<
   },
   
   resetGame: () => {
-    const { difficulty } = get();
-    set(createInitialState(difficulty));
+    const { settings } = get();
+    set(createInitialState(settings));
   }
-})); 
+}));

@@ -4,7 +4,7 @@ import { Toggle } from '@/components/ui/toggle';
 import { useGameStore } from '@/lib/store';
 
 export const NumberPad: React.FC = () => {
-  const { setCellValue, toggleNoteMode, isNoteMode, toggleCellNote } = useGameStore();
+  const { setCellValue, toggleNoteMode, isNoteMode, toggleCellNote, symbols, settings } = useGameStore();
   
   const handleNumberClick = (value: number) => {
     if (isNoteMode) {
@@ -17,6 +17,8 @@ export const NumberPad: React.FC = () => {
   const handleEraseClick = () => {
     setCellValue(null);
   };
+  
+  const padColumns = Math.min(settings.gridSize, 9);
   
   return (
     <div className="w-full max-w-md mt-4">
@@ -37,18 +39,24 @@ export const NumberPad: React.FC = () => {
           Erase
         </Button>
       </div>
-      <div className="grid grid-cols-9 gap-1">
-        {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((number) => (
+      <div className="grid gap-1" style={{ gridTemplateColumns: `repeat(${padColumns}, minmax(0, 1fr))` }}>
+        {symbols.map((label, index) => (
           <Button
-            key={number}
+            key={`${label}-${index}`}
             variant="secondary"
             className="h-10 w-full"
-            onClick={() => handleNumberClick(number)}
+            onClick={() => handleNumberClick(index + 1)}
           >
-            {number}
+            {label}
           </Button>
         ))}
       </div>
+
+      {settings.gridSize > 9 && (
+        <p className="mt-2 text-xs text-muted-foreground text-center">
+          Keyboard shortcuts follow the order shown on the pad (1-9, then A-Z).
+        </p>
+      )}
     </div>
   );
-}; 
+};

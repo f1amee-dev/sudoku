@@ -4,13 +4,11 @@ A modern Sudoku web application built with React, TypeScript, Tailwind CSS, and 
 
 ## Features
 
-- 9x9 Sudoku grid with interactive cells
-- Multiple difficulty levels (Easy, Medium, Hard, Expert)
-- Note-taking functionality
-- Mistake tracking
-- Timer
-- Dark/light mode toggle
-- Mobile-responsive design
+- Multiple grid sizes (4x4, 9x9, 16x16) tailored to 2x2, 3x3, or 4x4 boxes
+- Three game modes: Classic, Diagonal, and Knight (anti-knight training rule)
+- Guaranteed-solvable puzzles for every difficulty
+- Note-taking mode, mistake tracking, and in-game timer
+- Dark/light theme toggle and responsive layout
 
 ## Tech Stack
 
@@ -69,9 +67,9 @@ npm run dev
 
 ## Game Logic
 
-- The game generates a valid Sudoku puzzle using a backtracking algorithm
-- Difficulty levels determine how many cells are initially filled
-- Input validation ensures the game follows Sudoku rules
+- Solved grids are produced with a backtracking generator, honoring the selected constraints (Classic, Diagonal, or Knight)
+- Puzzles are carved from solved boards while re-checking that exactly one solution remains per difficulty
+- Diagonal mode enforces both main diagonals; Knight mode bans matching digits a knight move away (great for spotting L-shaped conflicts)
 - Notes mode allows players to mark potential values for empty cells
 
 ## Performance Optimizations
