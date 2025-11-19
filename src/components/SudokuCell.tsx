@@ -33,7 +33,9 @@ export const SudokuCell: React.FC<SudokuCellProps> = ({
   const displayValue = typeof value === 'number' ? symbols[value - 1] ?? String(value) : '';
   const noteValues = Array.from({ length: gridSize }, (_, idx) => idx + 1);
   const noteCols = Math.ceil(Math.sqrt(gridSize));
-  const textSize = gridSize <= 4 ? 'text-3xl' : gridSize <= 9 ? 'text-xl' : 'text-sm';
+  
+  // Dynamic text size based on grid size
+  const textSize = gridSize <= 4 ? 'text-4xl' : gridSize <= 9 ? 'text-3xl' : 'text-lg';
   
   const handleClick = () => {
     onClick(position);
@@ -42,33 +44,51 @@ export const SudokuCell: React.FC<SudokuCellProps> = ({
   return (
     <div
       className={cn(
-        'relative flex items-center justify-center w-full h-full font-medium border border-border',
-        'transition-colors duration-150 cursor-pointer select-none',
-        textSize,
-        isSelected && 'bg-primary/20 border-primary',
-        !isSelected && isSameRow && 'bg-muted/50',
-        !isSelected && isSameColumn && 'bg-muted/50',
-        !isSelected && isSameBox && 'bg-muted/30',
-        !isSelected && isSameValue && value && 'bg-secondary/50',
+        'flex items-center justify-center w-full h-full cursor-pointer select-none',
+        'transition-all duration-200 ease-in-out',
+        
+        // Background states
+        isSelected && 'bg-primary text-primary-foreground shadow-inner scale-100 z-10',
+        !isSelected && isSameValue && value && 'bg-primary/20 text-foreground font-semibold',
+        !isSelected && !isSameValue && (isSameRow || isSameColumn || isSameBox) && 'bg-muted/80',
+        !isSelected && !isSameValue && !isSameRow && !isSameColumn && !isSameBox && 'bg-card hover:bg-muted/50',
+        
+        // Diagonal mode special styling
         !isSelected && isDiagonal && 'bg-primary/5',
-        !isValid && 'text-destructive'
+        
+        // Error state
+        !isValid && 'text-destructive bg-destructive/10 animate-pulse'
       )}
       onClick={handleClick}
+      role="button"
+      aria-label={`Cell ${position.row + 1}, ${position.col + 1}. ${value ? `Value: ${displayValue}` : 'Empty'}`}
     >
       {value ? (
         <span className={cn(
-          isGiven ? 'font-bold' : 'font-normal'
+          textSize,
+          'leading-none transform transition-transform duration-300',
+          isSelected ? 'scale-110' : 'scale-100',
+          isGiven ? 'font-bold' : 'font-medium',
+          // If selected, color is handled by parent div (text-primary-foreground)
+          // If not selected but given, maybe different color?
+          !isSelected && isGiven && 'text-primary',
+          !isSelected && !isGiven && 'text-foreground'
         )}>
           {displayValue}
         </span>
       ) : (
-        <div className="grid gap-0 w-full h-full p-0.5" style={{ gridTemplateColumns: `repeat(${noteCols}, minmax(0, 1fr))` }}>
+        <div className="grid gap-0.5 w-full h-full p-1 content-center justify-center" style={{ gridTemplateColumns: `repeat(${noteCols}, minmax(0, 1fr))` }}>
           {noteValues.map((noteValue) => (
             <div
               key={noteValue}
-              className="flex items-center justify-center text-[8px] text-muted-foreground"
+              className="flex items-center justify-center"
             >
-              {notes.includes(noteValue) ? (symbols[noteValue - 1] ?? noteValue) : ''}
+              <span className={cn(
+                "text-[9px] leading-none font-medium transition-opacity duration-200",
+                notes.includes(noteValue) ? "opacity-100 text-muted-foreground" : "opacity-0"
+              )}>
+                {symbols[noteValue - 1] ?? noteValue}
+              </span>
             </div>
           ))}
         </div>

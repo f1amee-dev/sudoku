@@ -1,210 +1,140 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { useGameStore } from '@/lib/store';
 import { Difficulty, GameMode, GameSettings, GRID_SIZE_OPTIONS } from '@/types/sudoku';
+import { Clock, RotateCcw, Trophy, AlertCircle, Plus } from 'lucide-react';
 
 export const GameControls: React.FC = () => {
   const { settings, timer, mistakes, isComplete, resetGame, initializeGame } = useGameStore();
   const [showNewGameDialog, setShowNewGameDialog] = useState(false);
-  const [dialogStep, setDialogStep] = useState<'difficulty' | 'grid' | 'mode'>('difficulty');
   const [pendingSettings, setPendingSettings] = useState<GameSettings>(settings);
   
-  const modeLabels: Record<GameMode, string> = {
-    [GameMode.Classic]: 'Classic',
-    [GameMode.Diagonal]: 'Diagonal',
-  };
-
-  const modeSummaries: Record<GameMode, string> = {
-    [GameMode.Classic]: 'Standard Sudoku rules — keep each row, column, and box unique.',
-    [GameMode.Diagonal]: 'Classic rules plus both main diagonals must also contain every symbol once.',
-  };
-  
-  // Format timer as MM:SS
   const formattedTime = `${Math.floor(timer / 60).toString().padStart(2, '0')}:${(timer % 60).toString().padStart(2, '0')}`;
   
-  // Increment timer every second
   useEffect(() => {
     if (isComplete) return;
-    
     const interval = setInterval(() => {
       useGameStore.getState().incrementTimer();
     }, 1000);
-    
     return () => clearInterval(interval);
   }, [isComplete]);
   
-  // Calculate difficulty progress
-  const difficultyProgress = (() => {
-    switch (settings.difficulty) {
-      case Difficulty.Easy:
-        return 25;
-      case Difficulty.Medium:
-        return 50;
-      case Difficulty.Hard:
-        return 75;
-      case Difficulty.Expert:
-        return 100;
-      default:
-        return 50;
-    }
-  })();
-  
-  const handleDialogOpenChange = (open: boolean) => {
-    setShowNewGameDialog(open);
-    if (open) {
-      setDialogStep('difficulty');
-      setPendingSettings(settings);
-    }
-  };
-
-  const handleNextStep = () => {
-    if (dialogStep === 'difficulty') {
-      setDialogStep('grid');
-    } else if (dialogStep === 'grid') {
-      setDialogStep('mode');
-    }
-  };
-
-  const handlePreviousStep = () => {
-    if (dialogStep === 'mode') {
-      setDialogStep('grid');
-    } else if (dialogStep === 'grid') {
-      setDialogStep('difficulty');
-    }
-  };
-
   const handleStartNewGame = () => {
     initializeGame(pendingSettings);
     setShowNewGameDialog(false);
   };
 
-  const renderStepOptions = () => {
-    if (dialogStep === 'difficulty') {
-      return (
-        <div className="grid grid-cols-2 gap-2">
-          {[Difficulty.Easy, Difficulty.Medium, Difficulty.Hard, Difficulty.Expert].map((option) => (
-            <Button
-              key={option}
-              variant={pendingSettings.difficulty === option ? 'default' : 'outline'}
-              onClick={() => setPendingSettings(prev => ({ ...prev, difficulty: option }))}
-            >
-              {option}
-            </Button>
-          ))}
-        </div>
-      );
-    }
-    
-    if (dialogStep === 'grid') {
-      return (
-        <div className="grid gap-2">
-          {GRID_SIZE_OPTIONS.map(({ value, label }) => (
-            <Button
-              key={value}
-              variant={pendingSettings.gridSize === value ? 'default' : 'outline'}
-              className="justify-center"
-              onClick={() => setPendingSettings(prev => ({ ...prev, gridSize: value }))}
-            >
-              {label}
-            </Button>
-          ))}
-        </div>
-      );
-    }
-    
-    return (
-      <div className="space-y-2">
-        <div className="grid gap-2">
-          {[GameMode.Classic, GameMode.Diagonal].map((mode) => (
-            <Button
-              key={mode}
-              variant={pendingSettings.mode === mode ? 'default' : 'outline'}
-              className="justify-center"
-              onClick={() => setPendingSettings(prev => ({ ...prev, mode }))}
-            >
-              {modeLabels[mode]}
-            </Button>
-          ))}
-        </div>
-        <p className="text-xs text-muted-foreground leading-snug">
-          {modeSummaries[pendingSettings.mode]}
-        </p>
-      </div>
-    );
-  };
-  
-  const renderDialogDescription = () => {
-    switch (dialogStep) {
-      case 'difficulty':
-        return 'Start by choosing how intense you want the puzzle to be.';
-      case 'grid':
-        return 'Change the canvas size to train on minis or tackle giant boards.';
-      case 'mode':
-        return 'Pick the rule set: Classic or Diagonal.';
-      default:
-        return '';
-    }
-  };
-  
   return (
-    <div className="w-full max-w-md mb-4">
-      <div className="flex justify-between items-center mb-2">
-        <div className="text-sm">Time: {formattedTime}</div>
-        <div className="text-sm">Mistakes: {mistakes}</div>
-      </div>
-      
-      <div className="mb-4">
-        <div className="flex justify-between items-center mb-1">
-          <span className="text-xs">Difficulty</span>
-          <span className="text-xs font-medium">{settings.difficulty}</span>
+    <div className="w-full space-y-6">
+      {/* Info Card */}
+      <div className="flex items-center justify-between p-5 bg-secondary/30 rounded-2xl border border-border">
+        <div className="flex items-center gap-3 text-foreground">
+          <Clock className="w-5 h-5 text-primary" />
+          <span className="font-mono text-xl font-medium tracking-wider">{formattedTime}</span>
         </div>
-        <Progress value={difficultyProgress} className="h-2" />
-        <div className="mt-2 flex justify-between text-xs text-muted-foreground">
-          <span>{settings.gridSize} x {settings.gridSize}</span>
-          <span className="capitalize">{settings.mode}</span>
+        
+        <div className="flex items-center gap-3 text-foreground">
+          <AlertCircle className="w-5 h-5 text-destructive" />
+          <span className="font-mono text-xl font-medium">{mistakes}</span>
         </div>
       </div>
       
-      <div className="flex gap-2">
-        <Dialog open={showNewGameDialog} onOpenChange={handleDialogOpenChange}>
+      {/* Action Buttons */}
+      <div className="grid grid-cols-2 gap-4">
+        <Dialog open={showNewGameDialog} onOpenChange={setShowNewGameDialog}>
           <DialogTrigger asChild>
-            <Button variant="outline" className="flex-1">New Game</Button>
+            <Button size="lg" className="w-full h-14 text-base font-semibold rounded-xl transition-all hover:translate-y-[-2px]">
+              <Plus className="w-5 h-5 mr-2" />
+              New Game
+            </Button>
           </DialogTrigger>
-          <DialogContent>
+          <DialogContent className="sm:max-w-[425px] rounded-2xl border-2 border-muted bg-background p-6">
             <DialogHeader>
-              <DialogTitle className="capitalize">{dialogStep} selection</DialogTitle>
-              <DialogDescription>{renderDialogDescription()}</DialogDescription>
+              <DialogTitle className="text-2xl font-bold text-center mb-2">New Game</DialogTitle>
+              <DialogDescription className="text-center text-base">
+                Customize your next challenge.
+              </DialogDescription>
             </DialogHeader>
-            <div className="mt-4 space-y-4">
-              {renderStepOptions()}
-              <div className="flex justify-between">
-                <Button variant="ghost" disabled={dialogStep === 'difficulty'} onClick={handlePreviousStep}>Back</Button>
-                {dialogStep === 'mode' ? (
-                  <Button onClick={handleStartNewGame}>Start game</Button>
-                ) : (
-                  <Button onClick={handleNextStep}>Next</Button>
-                )}
+            
+            <div className="space-y-8 py-4">
+              {/* Difficulty */}
+              <div className="space-y-3">
+                <h4 className="text-sm font-bold text-primary uppercase tracking-wider text-center">Difficulty</h4>
+                <div className="grid grid-cols-2 gap-3">
+                  {[Difficulty.Easy, Difficulty.Medium, Difficulty.Hard, Difficulty.Expert].map((d) => (
+                    <Button
+                      key={d}
+                      variant={pendingSettings.difficulty === d ? "default" : "outline"}
+                      onClick={() => setPendingSettings(s => ({...s, difficulty: d}))}
+                      className="h-11 rounded-lg capitalize border-2"
+                    >
+                      {d}
+                    </Button>
+                  ))}
+                </div>
               </div>
+
+              {/* Grid Size */}
+               <div className="space-y-3">
+                <h4 className="text-sm font-bold text-primary uppercase tracking-wider text-center">Grid Size</h4>
+                <div className="flex gap-3 overflow-x-auto pb-2">
+                  {GRID_SIZE_OPTIONS.map(({ value, label }) => (
+                    <Button
+                      key={value}
+                      variant={pendingSettings.gridSize === value ? "default" : "outline"}
+                      onClick={() => setPendingSettings(s => ({...s, gridSize: value}))}
+                      className="h-11 rounded-lg whitespace-nowrap flex-1 border-2"
+                    >
+                      {label}
+                    </Button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Mode */}
+              <div className="space-y-3">
+                 <h4 className="text-sm font-bold text-primary uppercase tracking-wider text-center">Mode</h4>
+                 <div className="grid grid-cols-2 gap-3">
+                    {[GameMode.Classic, GameMode.Diagonal].map(m => (
+                      <Button
+                        key={m}
+                        variant={pendingSettings.mode === m ? "default" : "outline"}
+                        onClick={() => setPendingSettings(s => ({...s, mode: m}))}
+                        className="h-11 rounded-lg capitalize border-2"
+                      >
+                        {m}
+                      </Button>
+                    ))}
+                 </div>
+              </div>
+
+              <Button size="lg" className="w-full h-14 rounded-xl text-lg mt-4" onClick={handleStartNewGame}>
+                Start Game
+              </Button>
             </div>
           </DialogContent>
         </Dialog>
         
-        <Button variant="secondary" className="flex-1" onClick={resetGame}>
-          Reset
+        <Button variant="outline" size="lg" onClick={resetGame} className="w-full h-14 text-base font-medium rounded-xl border-2 hover:bg-secondary transition-colors">
+          <RotateCcw className="w-5 h-5 mr-2" />
+          Restart
         </Button>
       </div>
       
+      {/* Completion Card */}
       {isComplete && (
-        <div className="mt-4 p-4 bg-primary/10 rounded-md text-center">
-          <h3 className="font-bold text-lg">Puzzle Complete!</h3>
-          <p className="text-sm">Time: {formattedTime} | Mistakes: {mistakes}</p>
-          <Button className="mt-2" onClick={() => setShowNewGameDialog(true)}>
+        <div className="p-6 bg-primary/5 rounded-2xl border-2 border-primary/20 text-center animate-in fade-in zoom-in duration-500">
+          <Trophy className="w-12 h-12 text-primary mx-auto mb-4" />
+          <h3 className="text-2xl font-bold text-foreground mb-2">Puzzle Solved!</h3>
+          <p className="text-muted-foreground mb-6">
+            You completed the {settings.difficulty} puzzle in {formattedTime}.
+          </p>
+          <Button size="lg" className="w-full rounded-xl" onClick={() => setShowNewGameDialog(true)}>
             Play Again
           </Button>
         </div>
       )}
     </div>
   );
-}; 
+};

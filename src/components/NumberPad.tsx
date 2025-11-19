@@ -1,7 +1,8 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Toggle } from '@/components/ui/toggle';
 import { useGameStore } from '@/lib/store';
+import { cn } from '@/lib/utils';
+import { Pencil, Eraser } from 'lucide-react';
 
 export const NumberPad: React.FC = () => {
   const { setCellValue, toggleNoteMode, isNoteMode, toggleCellNote, symbols, settings } = useGameStore();
@@ -18,33 +19,41 @@ export const NumberPad: React.FC = () => {
     setCellValue(null);
   };
   
-  const padColumns = Math.min(settings.gridSize, 9);
-  
   return (
-    <div className="w-full max-w-md mt-4">
-      <div className="flex justify-between items-center mb-2">
-        <Toggle
-          pressed={isNoteMode}
-          onPressedChange={toggleNoteMode}
-          aria-label="Toggle notes mode"
-          className="text-sm"
+    <div className="w-full space-y-5">
+      {/* Tools Row */}
+      <div className="grid grid-cols-2 gap-4">
+        <Button
+          variant={isNoteMode ? "default" : "outline"}
+          size="lg"
+          onClick={toggleNoteMode}
+          className={cn(
+            "h-12 rounded-xl transition-all duration-200 border-2",
+            isNoteMode ? "border-primary" : "border-border text-muted-foreground hover:text-foreground"
+          )}
         >
-          Notes
-        </Toggle>
+          <Pencil className="w-5 h-5 mr-2" />
+          Notes {isNoteMode ? "On" : "Off"}
+        </Button>
+        
         <Button
           variant="outline"
+          size="lg"
           onClick={handleEraseClick}
-          className="text-sm"
+          className="h-12 rounded-xl border-2 text-muted-foreground hover:text-destructive hover:border-destructive hover:bg-destructive/5 transition-colors"
         >
+          <Eraser className="w-5 h-5 mr-2" />
           Erase
         </Button>
       </div>
-      <div className="grid gap-1" style={{ gridTemplateColumns: `repeat(${padColumns}, minmax(0, 1fr))` }}>
+
+      {/* Number Grid */}
+      <div className="grid grid-cols-5 gap-3">
         {symbols.map((label, index) => (
           <Button
             key={`${label}-${index}`}
             variant="secondary"
-            className="h-10 w-full"
+            className="h-14 w-full rounded-xl text-2xl font-medium bg-secondary/50 hover:bg-primary hover:text-primary-foreground transition-colors border-2 border-transparent hover:border-primary"
             onClick={() => handleNumberClick(index + 1)}
           >
             {label}
@@ -53,8 +62,8 @@ export const NumberPad: React.FC = () => {
       </div>
 
       {settings.gridSize > 9 && (
-        <p className="mt-2 text-xs text-muted-foreground text-center">
-          Keyboard shortcuts follow the order shown on the pad (1-9, then A-Z).
+        <p className="text-xs text-center text-muted-foreground mt-2">
+          Keyboard: 1-9, then A-Z
         </p>
       )}
     </div>

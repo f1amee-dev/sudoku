@@ -73,7 +73,10 @@ export const SudokuBoard: React.FC = () => {
   };
   
   return (
-    <div className="grid w-full max-w-md aspect-square border-2 border-primary" style={boardStyle}>
+    <div 
+      className="grid w-full aspect-square bg-card border-4 border-primary rounded-[var(--radius)] overflow-hidden" 
+      style={boardStyle}
+    >
       {board.map((row, rowIndex) =>
         row.map((cell, colIndex) => {
           const position = { row: rowIndex, col: colIndex };
@@ -86,12 +89,19 @@ export const SudokuBoard: React.FC = () => {
             false;
           const isDiagonalCell = settings.mode === GameMode.Diagonal && (rowIndex === colIndex || rowIndex + colIndex === size - 1);
           
+          // Calculate borders
+          const isBoxRight = (colIndex + 1) % boxSize === 0 && colIndex !== size - 1;
+          const isBoxBottom = (rowIndex + 1) % boxSize === 0 && rowIndex !== size - 1;
+          
           return (
             <div 
               key={`${rowIndex}-${colIndex}`}
               className={`
-                ${colIndex % boxSize === 0 && colIndex !== 0 ? 'border-l-2 border-l-primary' : ''}
-                ${rowIndex % boxSize === 0 && rowIndex !== 0 ? 'border-t-2 border-t-primary' : ''}
+                relative border-r border-b border-border/50
+                ${isBoxRight ? '!border-r-primary/30 border-r-2' : ''}
+                ${isBoxBottom ? '!border-b-primary/30 border-b-2' : ''}
+                ${colIndex === size - 1 ? 'border-r-0' : ''}
+                ${rowIndex === size - 1 ? 'border-b-0' : ''}
               `}
             >
               <SudokuCell
